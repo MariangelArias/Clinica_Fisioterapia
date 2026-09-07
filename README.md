@@ -1,6 +1,6 @@
 # Clínica de Fisioterapia
 
-Proyecto Django para gestionar pacientes, expedientes clínicos, diagnósticos CIE y citas.
+Sistema Django para la gestión clínica de fisioterapia: pacientes, expedientes, citas, diagnósticos CIE y autenticación.
 
 ## Descripción
 
@@ -135,6 +135,3 @@ También define `EMAIL_HOST_USER` y `EMAIL_HOST_PASSWORD` desde el `.env`.
 ```powershell
 python manage.py check
 ```
-
----
-
