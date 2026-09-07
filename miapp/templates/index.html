@@ -1,0 +1,160 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+
+<!-- Página principal: resumen de métricas y agenda breve -->
+<div class="inicio-banner">
+
+    <h1>
+        Bienvenido 
+    </h1>
+
+    <p class="inicio-subtitulo">
+
+        Administre pacientes, expedientes clínicos y citas de manera rápida,
+        segura y organizada.
+
+    </p>
+
+</div>
+
+<!-- ESTADÍSTICAS -->
+
+<!-- Sección de tarjetas con totales de pacientes, citas y citas para hoy -->
+<div class="stats-grid">
+
+    <a href="/pacientes/" class="stat-link">
+
+        <div class="stat-card">
+
+            <h3 class="contador" data-target="{{ total_pacientes }}">0</h3>
+            <!--<h3 class="contador" data-target="150">0</h3>-->
+
+            <p>Pacientes registrados</p>
+
+        </div>
+
+    </a>
+
+    <a href="/citas/" class="stat-link">
+
+        <div class="stat-card">
+
+            <h3 class="contador" data-target="{{ total_citas }}">0</h3>
+
+            <p>Citas registradas</p>
+
+        </div>
+
+    </a>
+
+    <a href="/citas/hoy/" class="stat-link">
+
+        <div class="stat-card">
+
+            <h3 class="contador" data-target="{{ citas_hoy }}">0</h3>
+
+            <p>Citas para hoy</p>
+
+        </div>
+
+    </a>
+
+</div>
+
+<div class="dashboard-cards">
+
+    <div class="dashboard-card reveal">
+
+        <h2> Agenda de hoy</h2>
+
+        {% for cita in agenda_hoy %}
+
+            <div class="agenda-item">
+
+                <div class="agenda-hora">
+
+                    {{ cita.hora }}
+
+                </div>
+
+                <div class="agenda-info">
+
+                    <strong>
+                        {{ cita.paciente.nombre }}
+                    </strong>
+
+                    <br>
+
+                    {{ cita.tratamiento }}
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p>
+                No hay citas programadas para hoy.
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<!-- TARJETAS -->
+
+<div class="dashboard-card reveal">
+
+    <div class="card reveal">
+
+        <h2> Pacientes</h2>
+
+        <p>
+            Registre nuevos pacientes y consulte la información clínica.
+        </p>
+
+    </div>
+
+    <div class="card reveal">
+
+        <h2> Expedientes</h2>
+
+        <p>
+            Controle diagnósticos, tratamientos y evolución clínica.
+        </p>
+
+    </div>
+
+    <div class="card reveal">
+
+        <h2> Agenda</h2>
+
+        <p>
+            Organice las citas mediante el calendario integrado.
+        </p>
+
+    </div>
+
+</div>
+
+<div class="card reveal">
+
+    <h2>¿Qué puede hacer con este sistema?</h2>
+
+    <ul class="lista-funciones">
+
+        <li> Registrar nuevos pacientes</li>
+        <li> Consultar expedientes clínicos</li>
+        <li> Gestionar diagnósticos CIE</li>
+        <li> Agendar citas</li>
+        <li> Registrar tratamientos</li>
+        <li> Llevar seguimiento clínico</li>
+
+    </ul>
+
+</div>
+
+{% endblock %}

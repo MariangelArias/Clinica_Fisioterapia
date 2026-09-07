@@ -1,0 +1,8 @@
+<!-- Página para que el usuario ingrese y confirme su nueva contraseña -->
+<h2>Nueva contraseña</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Cambiar contraseña</button>
+</form>

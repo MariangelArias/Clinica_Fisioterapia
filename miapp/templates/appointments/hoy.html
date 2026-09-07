@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+
+<!-- Página de citas del día: muestra las citas programadas para hoy -->
+<h2> Citas para hoy</h2>
+
+{% for cita in citas %}
+
+<div class="card reveal">
+
+    <h3>{{ cita.paciente.nombre }}</h3>
+
+    <p>
+        <strong>Hora:</strong>
+        {{ cita.hora }}
+    </p>
+
+    <p>
+        <strong>Tratamiento:</strong>
+        {{ cita.tratamiento }}
+    </p>
+
+</div>
+
+{% empty %}
+
+<div class="card reveal">
+
+    No hay citas para hoy.
+
+</div>
+
+{% endfor %}
+
+<div class="volver-inicio" style="margin-top: 20px; text-align: left;">
+    <!-- Botón para regresar al inicio -->
+    <a href="{% url 'inicio' %}">
+        <button type="button">
+            Volver al inicio
+        </button>
+    </a>
+</div>
+
+{% endblock %}

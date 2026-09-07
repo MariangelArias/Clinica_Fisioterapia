@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de cita</title>
+</head>
+<body style="margin:0; padding:0; background:#eef4fb; font-family:Arial, sans-serif; color:#102a43;">
+<!-- Email de confirmación de cita: se envía al paciente con todos los datos del expediente -->
+ 
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+        <tr>
+            <td align="center" style="padding:30px 10px;">
+                <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:20px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.12);">
+                    <tr>
+                        <td style="background:#1565c0; color:#ffffff; text-align:center; padding:30px 20px; font-size:24px; font-weight:700;">
+                            Confirmación de cita
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:30px 30px 20px; color:#102a43; font-size:16px; line-height:1.6;">
+                            <p>Hola {{ paciente.nombre }},</p>
+                            <p>Tu cita ha sido registrada correctamente y aquí tienes los detalles:</p>
+                            <p>
+                                <strong>Fecha:</strong> {{ expediente.fecha|date:"d/m/Y" }}<br>
+                                <strong>Hora:</strong> {{ expediente.hora|time:"H:i" }}
+                            </p>
+                            <p>
+                                <strong>Tratamiento:</strong><br>
+                                {{ expediente.tratamiento|linebreaksbr }}
+                            </p>
+                            <p>
+                                <strong>Notas:</strong><br>
+                                {{ expediente.notas|linebreaksbr }}
+                            </p>
+                            {% if expediente.codigo_cie %}
+                                <p>
+                                    <strong>Código CIE:</strong> {{ expediente.codigo_cie }}<br>
+                                    <strong>Diagnóstico:</strong> {{ expediente.diagnostico }}<br>
+                                    <strong>Nota adicional:</strong><br>
+                                    {{ expediente.nota_adicional|linebreaksbr }}
+                                </p>
+                            {% endif %}
+                            <p>
+                                Si necesitas cambiar o cancelar tu cita, por favor contáctanos.
+                            </p>
+                            <p>Gracias por confiar en nuestra clínica.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background:#eef3fb; color:#334155; text-align:center; padding:20px 30px; font-size:14px;">
+                            Clínica de Fisioterapia Arial — Atención profesional y seguimiento clínico
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

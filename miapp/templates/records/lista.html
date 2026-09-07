@@ -1,0 +1,113 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+
+<!-- Página de expedientes médicos: muestra historial de citas y diagnóstico para un paciente -->
+<h2> Expediente de {{ paciente.nombre }}</h2>
+
+<div class="resumen-paciente">
+
+    <h3> {{ paciente.nombre }}</h3>
+
+    <p>
+        <strong>Cédula:</strong>
+        {{ paciente.cedula }}
+    </p>
+
+    <p>
+        <strong>Teléfono:</strong>
+        {{ paciente.telefono }}
+    </p>
+
+</div>
+
+<div class="acciones-expediente">
+
+    <a href="{% url 'crear_expediente' id=paciente.id %}">
+        <button class="btn-accion">
+             Nueva cita
+        </button>
+    </a>
+
+</div>
+{% for e in expedientes %}
+
+<div class="card reveal">
+
+    <strong>
+         {{ e.fecha }} -  {{ e.hora }}
+    </strong>
+
+    <br><br>
+
+    <b>Tratamiento:</b>
+    {{ e.tratamiento }}
+
+    <br><br>
+
+    <b>Notas:</b>
+    {{ e.notas }}
+
+    <br><br>
+
+    {% if e.codigo_cie %}
+
+        <b>Código CIE:</b>
+        {{ e.codigo_cie }}
+
+        <br><br>
+
+        <b>Diagnóstico:</b>
+        {{ e.diagnostico }}
+
+        <br><br>
+
+        <b>Nota adicional:</b>
+        {{ e.nota_adicional }}
+
+        <br><br>
+
+    {% endif %}
+
+   {% if puede_editar %}
+
+    <a href="{% url 'editar_expediente' e.id %}">
+        <button>
+             Editar Expediente
+        </button>
+    </a>
+
+{% endif %}
+
+</div>
+
+
+<br>
+
+
+
+{% empty %}
+
+
+
+<div class="card reveal">
+
+    <p>
+        No hay citas registradas para este paciente.
+    </p>
+
+</div>
+
+ 
+
+{% endfor %}
+
+<div style="margin-top: 25px; text-align: left;">
+    <a href="/pacientes/">
+        <button>
+            Volver a pacientes
+        </button>
+    </a>
+</div>
+
+{% endblock %}

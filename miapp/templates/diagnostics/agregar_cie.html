@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<!-- Página para confirmar y guardar el diagnóstico CIE seleccionado en el expediente -->
+
+<h2> Agregar diagnóstico al expediente</h2>
+
+<div class="card reveal">
+
+    <h3>Paciente:</h3>
+    <p>{{ paciente.nombre }}</p>
+
+    <h3>Código CIE:</h3>
+    <p>{{ codigo }}</p>
+
+    <h3>Diagnóstico:</h3>
+    <p>{{ diagnostico }}</p>
+
+</div>
+
+<form method="POST" class="card">
+
+    {% csrf_token %}
+
+    <label>Nota adicional</label>
+
+    <textarea
+        name="nota_adicional"
+        rows="5"
+        placeholder="Agregar observaciones clínicas..."
+    ></textarea>
+
+    <br><br>
+
+    <button type="submit">
+
+         Guardar diagnóstico
+
+    </button>
+
+</form>
+
+<!-- Enlace de navegación para regresar al expediente del paciente sin guardar cambios -->
+<a href="/pacientes/{{ paciente.id }}/expediente/">
+
+     Volver al expediente
+
+</a>
+
+{% endblock %}

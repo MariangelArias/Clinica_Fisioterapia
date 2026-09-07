@@ -1,0 +1,266 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+
+<!-- Formulario de creación de cita: selecciona fecha, hora y diagnóstico -->
+<h2> Nueva cita para {{ paciente.nombre }}</h2>
+
+<div class="card reveal">
+
+    <div id="calendar"></div>
+
+</div>
+
+<br>
+
+<form method="POST" class="card">
+
+    {% csrf_token %}
+
+    <p>
+        <strong>Fecha:</strong><br>
+        {{ form.fecha }}
+    </p>
+
+    <p>
+        <strong>Hora:</strong><br>
+        {{ form.hora }}
+    </p>
+
+
+    <p>
+        <strong>Código CIE:</strong><br>
+        {{ form.codigo_cie }}
+    </p>
+
+    <p>
+        <strong>Diagnóstico:</strong><br>
+        {{ form.diagnostico }}
+
+    </p>
+
+    <!-- Enlace para buscar un diagnóstico CIE -->
+    <a id="diagnosticoLink" href="{% url 'cie' paciente.id %}?next={{ request.get_full_path|urlencode }}">
+        <button type="button">
+            Buscar diagnóstico
+        </button>
+    </a>
+
+     <p>
+        <strong>Tratamiento:</strong><br>
+        {{ form.tratamiento }}
+    </p>
+
+    <p>
+        <strong>Notas:</strong><br>
+        {{ form.notas }}
+    </p>
+
+    <p>
+        <strong>Nota adicional:</strong><br>
+        {{ form.nota_adicional }}
+    </p>
+
+    <button type="submit">
+
+        Guardar cita
+
+    </button>
+
+    <!-- Guarda la cita y regresa al expediente del paciente -->
+
+</form>
+
+<!-- FullCalendar: biblioteca JavaScript para mostrar un calendario interactivo en el formulario -->
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css' rel='stylesheet'>
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.15/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.15/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.15/index.global.min.js'></script>
+
+<script>
+
+// Esta sección inicializa FullCalendar cuando la página ya está cargada.
+// FullCalendar es una librería de calendario para JavaScript que permite mostrar eventos,
+// seleccionar fechas y generar una vista interactiva de la agenda.
+document.addEventListener('DOMContentLoaded', function() {
+
+    var calendarEl = document.getElementById('calendar');
+
+    var calendarPlugins = [];
+    if (typeof FullCalendarDayGrid !== 'undefined') {
+        calendarPlugins.push(FullCalendarDayGrid);
+    } else if (typeof FullCalendar !== 'undefined' && FullCalendar.dayGridPlugin) {
+        calendarPlugins.push(FullCalendar.dayGridPlugin);
+    }
+    if (typeof FullCalendarTimeGrid !== 'undefined') {
+        calendarPlugins.push(FullCalendarTimeGrid);
+    } else if (typeof FullCalendar !== 'undefined' && FullCalendar.timeGridPlugin) {
+        calendarPlugins.push(FullCalendar.timeGridPlugin);
+    }
+    if (typeof FullCalendarInteraction !== 'undefined') {
+        calendarPlugins.push(FullCalendarInteraction);
+    } else if (typeof FullCalendar !== 'undefined' && FullCalendar.interactionPlugin) {
+        calendarPlugins.push(FullCalendar.interactionPlugin);
+    }
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+
+        plugins: calendarPlugins,
+
+        initialView: 'timeGridWeek',
+
+        locale: 'es',
+
+        height: 'auto',
+        contentHeight: 560,
+        aspectRatio: 1.4,
+
+        selectable: true,
+
+        slotMinTime: "07:00:00",
+
+        slotMaxTime: "18:00:00",
+
+        allDaySlot: false,
+
+        nowIndicator: true,
+
+        customButtons: {
+            myToday: {
+                text: 'Hoy',
+                click: function() {
+                    calendar.today();
+                    calendar.changeView('timeGridDay');
+                }
+            }
+        },
+
+        headerToolbar: {
+
+            left: 'prev,next myToday',
+
+            center: 'title',
+
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+
+        },
+
+        views: {
+            dayGridMonth: { buttonText: 'Mes' },
+            timeGridWeek: { buttonText: 'Semana' },
+            timeGridDay: { buttonText: 'Día' }
+        },
+
+        eventColor: '#5b8def',
+        eventTextColor: '#ffffff',
+        eventDisplay: 'block',
+        displayEventTime: false,
+        dayMaxEventRows: 3,
+
+        // La URL /eventos/ provee los eventos del calendario desde el servidor.
+        // FullCalendar hará una solicitud para obtener las citas que se muestran en la vista.
+        events: '/eventos/',
+
+        slotDuration: '01:00:00',
+        snapDuration: '01:00:00',
+        slotLabelInterval: '01:00',
+
+        // dateClick se dispara cuando el usuario hace clic en una fecha/hora del calendario.
+        // Aquí tomamos la fecha seleccionada, la formateamos y la copiamos en los campos del formulario.
+        dateClick: function(info) {
+
+            // info.date es un objeto Date con la fecha y hora seleccionadas.
+            let fechaHora = info.date;
+
+            // Ajustar minutos/segundos a cero para guardar solo la hora completa.
+            fechaHora.setMinutes(0, 0, 0);
+
+            // Formatear fecha en YYYY-MM-DD para el campo de fecha del formulario.
+            let fecha = fechaHora
+                .toISOString()
+                .split('T')[0];
+
+            // Formatear hora en HH:MM para el campo de hora del formulario.
+            let hora = fechaHora
+                .toTimeString()
+                .slice(0,5);
+
+            // Asignar los valores calculados a los campos ocultos del formulario.
+            document.getElementById(
+                'id_fecha'
+            ).value = fecha;
+
+            document.getElementById(
+                'id_hora'
+            ).value = hora;
+
+            // Actualizar el enlace de búsqueda de diagnóstico con la fecha y hora seleccionadas.
+            updateDiagnosticoLink();
+
+            // Desplazar la página hacia abajo para que el usuario vea el formulario completo.
+            window.scrollTo({
+
+                top: document.body.scrollHeight,
+
+                behavior: 'smooth'
+
+            });
+
+        },
+
+        eventColor: '#5b8def'
+
+    });
+
+    calendar.render();
+    updateDiagnosticoLink();
+
+});
+
+// Actualiza el enlace de búsqueda de diagnóstico para que mantenga la fecha y hora seleccionadas.
+// De esta forma, cuando el usuario hace clic en "Buscar diagnóstico", el sistema recuerda
+// la cita propuesta y puede volver al formulario con esos valores.
+function updateDiagnosticoLink() {
+    const link = document.getElementById('diagnosticoLink');
+    const fechaInput = document.getElementById('id_fecha');
+    const horaInput = document.getElementById('id_hora');
+
+    if (!link || !fechaInput || !horaInput) {
+        return;
+    }
+
+    const currentUrl = new URL(window.location.href);
+    const currentParams = new URLSearchParams(currentUrl.search);
+
+    if (fechaInput.value) {
+        currentParams.set('fecha', fechaInput.value);
+    } else {
+        currentParams.delete('fecha');
+    }
+
+    if (horaInput.value) {
+        currentParams.set('hora', horaInput.value);
+    } else {
+        currentParams.delete('hora');
+    }
+
+    const nextUrl = currentUrl.pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
+    const linkUrl = new URL(link.href);
+
+    linkUrl.searchParams.set('next', nextUrl);
+    link.href = linkUrl.toString();
+}
+
+</script>
+
+<br>
+
+<a href="{% url 'ver_expediente' paciente.id %}">
+    <button type="button">
+         Volver al expediente
+    </button>
+</a>
+
+{% endblock %}

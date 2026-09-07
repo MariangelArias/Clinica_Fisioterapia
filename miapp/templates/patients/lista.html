@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<!-- Lista de pacientes registrados en el sistema -->
+<h2> Pacientes</h2>
+
+<!-- Botón rápido para agregar un nuevo paciente -->
+<a href="/pacientes/crear/">
+    <button> Agregar paciente</button>
+</a>
+
+{% for p in pacientes %}
+
+<div class="card reveal">
+    <strong>{{ p.nombre }}</strong><br>
+    Cédula: {{ p.cedula }}<br>
+    Teléfono: {{ p.telefono }}<br>
+
+    <a href="/pacientes/{{ p.id }}/expediente/">Ver expediente</a>
+</div>
+
+{% endfor %}
+<a href="/inicio/">
+    <button>
+         Volver al inicio
+    </button>
+</a>
+
+<br><br>
+{% endblock %}

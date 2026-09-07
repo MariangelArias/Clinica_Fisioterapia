@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<!-- Formulario para registrar un nuevo paciente con sus datos básicos -->
+<h2> Nuevo Paciente</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

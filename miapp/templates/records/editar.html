@@ -1,0 +1,97 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+
+<h2>
+
+     Editar cita
+
+</h2>
+
+<div class="card reveal">
+
+    <strong>Paciente:</strong>
+
+    {{ expediente.paciente.nombre }}
+
+    <br><br>
+
+    <strong>Fecha:</strong>
+
+    {{ expediente.fecha }}
+
+    <br><br>
+
+    <strong>Hora:</strong>
+
+    {{ expediente.hora }}
+
+</div>
+
+<br>
+
+<form method="POST" class="card">
+
+    {% csrf_token %}
+
+    <p>
+
+        <strong>Tratamiento:</strong><br>
+
+        {{ form.tratamiento }}
+
+    </p>
+
+    <p>
+
+        <strong>Notas:</strong><br>
+
+        {{ form.notas }}
+
+    </p>
+
+    <p>
+
+        <strong>Diagnóstico:</strong><br>
+
+        {{ form.diagnostico }}
+
+    </p>
+
+    {% if puede_editar %}
+    <a href="{% url 'cie' expediente.paciente.id %}?next={{ request.path|urlencode }}">
+        <button type="button">
+              Buscar diagnóstico
+        </button>
+    </a>
+    {% endif %}
+
+    <p>
+
+        <strong>Nota adicional:</strong><br>
+
+        {{ form.nota_adicional }}
+
+    </p>
+
+    {% if puede_editar %}
+    <button type="submit">
+
+          Guardar cambios
+
+    </button>
+    {% endif %}
+
+</form>
+
+<br>
+
+<a href="{% url 'ver_expediente' expediente.paciente.id %}">
+
+    <button type="button">
+          Volver al expediente
+    </button>
+
+</a>
+
+{% endblock %}

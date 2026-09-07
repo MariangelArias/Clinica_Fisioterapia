@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Página de inicio de sesión: formulario para autenticación de usuarios -->
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+
+<body class="login-container">
+
+    <div class="login-card">
+
+        <!-- LOGO -->
+        <div style="margin-bottom:20px;">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" style="width:90px;">
+        </div>
+
+        <!-- TITULO -->
+        <h1 style="color:#0d47a1; font-size:28px; margin-bottom:5px;">
+            Bienvenido
+        </h1>
+       
+
+        <p style="color:#607d8b; margin-bottom:25px;">
+            Inicia sesión para continuar
+        </p>
+
+        <!-- FORM -->
+        <!-- Formulario de autenticación con CSRF para seguridad -->
+        <form method="post" action="{% url 'login' %}">
+            <!-- CSRF: token que protege el formulario contra ataques de falsificación de solicitudes entre sitios. -->
+            <!-- Django agrega este valor único para confirmar que la petición viene de la misma aplicación. -->
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+
+            <p>
+                <label>Usuario</label>
+                <input type="text" name="username" value="{{ form.username.value|default:'' }}" placeholder="Ingresa tu usuario" required>
+                {% if form.username.errors %}
+                    <div class="field-errors">
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </p>
+
+            <p>
+                <label>Contraseña</label>
+                <input type="password" name="password" placeholder="Ingresa tu contraseña" required>
+                {% if form.password.errors %}
+                    <div class="field-errors">
+                        {% for error in form.password.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </p>
+
+                <button type="submit" style="width:100%;">
+                Iniciar sesión
+            </button>
+
+        </form>
+
+        {% if no_users %}
+            <p style="margin-top:20px; color:#d32f2f;">
+                No hay usuarios registrados. <a href="{% url 'register' %}">Crear el primer usuario</a>.
+            </p>
+        {% endif %}
+
+        <!-- -->
+        <a href="{% url 'password_reset' %}">
+            ¿Olvidaste tu contraseña?
+        </a>
+    </div>
+
+    
+</body>
+</html>

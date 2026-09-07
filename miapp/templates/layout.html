@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{% load static %}
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Clínica de Fisioterapia</title>
+    <!-- Plantilla base: esta página contiene el encabezado, el pie, el menú y el bloque de contenido principal -->
+
+    <link rel="stylesheet"
+          href="{% static 'css/estilos.css' %}">
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-container">
+
+        <div class="logo-area">
+
+            <img
+                src="{% static 'images/logo.png' %}"
+                alt="Logo Clínica"
+                class="logo-img"
+            >
+
+            <div>
+
+                <h1>Clínica de Fisioterapia Arial</h1>
+
+                <p class="subtitulo">
+
+                    Atención profesional y seguimiento clínico
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="header-right">
+
+            {% if user.is_authenticated %}
+
+            <div class="user-panel">
+
+                <span class="usuario-logueado">
+
+                    👤 {{ user.username }}
+
+                </span>
+
+                <form
+                    action="{% url 'logout' %}"
+                    method="post"
+                    class="logout-form">
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="logout-btn">
+
+                        Cerrar sesión
+
+                    </button>
+
+                </form>
+
+            </div>
+            {% endif %}
+
+            <nav>
+
+                <a href="/">
+
+                     Inicio
+
+                </a>
+
+                <a href="/pacientes/">
+
+                     Pacientes
+
+                </a>
+
+                <a href="/pacientes/crear/">
+
+                     Nuevo paciente
+
+                </a>
+
+                <!-- Botón de modo oscuro: alterna la clase "dark-mode" en el body y guarda la preferencia en localStorage -->
+                <button id="darkModeToggle">
+
+                    🌙
+
+                </button>
+
+            </nav>
+
+        </div>
+
+    </div>
+
+</header>
+
+{% if messages %}
+
+<div class="toast-container">
+
+    {% for message in messages %}
+
+        <div class="toast">
+
+            {{ message }}
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+<section class="hero">
+
+    <div class="hero-overlay">
+
+        <h2>
+
+            Sistema Integral de Gestión Clínica
+
+        </h2>
+
+        <p>
+
+            Administración de pacientes, expedientes,
+            diagnósticos CIE y agenda médica.
+
+        </p>
+
+    </div>
+
+</section>
+
+<div class="container">
+
+    {% block contenido %}
+    {% endblock %}
+
+</div>
+
+<footer>
+
+    <div class="footer-content">
+
+        <p>
+
+            © 2026 Clínica de Fisioterapia
+
+        </p>
+
+        <p>
+
+            Sistema de Expedientes Clínicos
+
+        </p>
+
+    </div>
+
+</footer>
+
+<script>
+
+const reveals = document.querySelectorAll('.reveal');
+const counters = document.querySelectorAll('.contador');
+const darkModeToggle = document.getElementById('darkModeToggle');
+
+window.addEventListener('scroll', revealCards);
+window.addEventListener('scroll', reveal);
+
+// Animación de tarjetas: revela las tarjetas cuando entran en el área visible
+function revealCards() {
+
+    reveals.forEach(card => {
+
+        const top = card.getBoundingClientRect().top;
+
+        const visible = window.innerHeight - 100;
+
+        if (top < visible) {
+
+            card.classList.add('active');
+
+        }
+
+    });
+
+}
+
+function reveal() {
+
+    reveals.forEach(element => {
+
+        const windowHeight = window.innerHeight;
+
+        const elementTop = element.getBoundingClientRect().top;
+
+        const elementVisible = 100;
+
+        if (elementTop < windowHeight - elementVisible) {
+
+            element.classList.add('active');
+
+        }
+
+    });
+
+}
+
+// Función encargada de animar los contadores del dashboard
+function initCounters() {
+
+    counters.forEach(counter => {
+
+        const target = Number(counter.dataset.target) || 0;
+
+        let current = 0;
+
+        const increment = Math.max(
+            1,
+            Math.ceil(target / 50)
+        );
+
+        const updateCounter = () => {
+
+            if (current < target) {
+
+                current += increment;
+
+                if (current > target) {
+
+                    current = target;
+
+                }
+
+                counter.innerText = current;
+
+                requestAnimationFrame(updateCounter);
+
+            }
+
+        };
+
+        updateCounter();
+
+    });
+
+}
+
+// Inicializa el modo oscuro cuando se carga la página.
+// Busca en localStorage si el usuario ya lo activó antes y aplica la clase CSS correspondiente.
+function initDarkMode() {
+
+    if (!darkModeToggle) return;
+
+    if (
+        localStorage.getItem('darkMode')
+        === 'enabled'
+    ) {
+
+        document.body.classList.add(
+            'dark-mode'
+        );
+
+        darkModeToggle.textContent = '☀️';
+
+    }
+
+    // Al hacer clic en el botón, alternar el modo oscuro.
+    darkModeToggle.addEventListener(
+        'click',
+        () => {
+
+            document.body.classList.toggle(
+                'dark-mode'
+            );
+
+            if (
+                document.body.classList.contains(
+                    'dark-mode'
+                )
+            ) {
+
+                // Guardar la preferencia para la próxima vez.
+                localStorage.setItem(
+                    'darkMode',
+                    'enabled'
+                );
+
+                darkModeToggle.textContent = '☀️';
+
+            } else {
+
+                localStorage.setItem(
+                    'darkMode',
+                    'disabled'
+                );
+
+                darkModeToggle.textContent = '🌙';
+
+            }
+
+        }
+    );
+
+}
+
+revealCards();
+reveal();
+initCounters();
+initDarkMode();
+
+</script>
+
+</body>
+
+</html>

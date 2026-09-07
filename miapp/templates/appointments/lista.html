@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+
+<!-- Lista completa de citas: muestra cada cita registrada en el sistema -->
+<h2> Todas las citas</h2>
+
+{% for cita in citas %}
+
+<div class="card reveal">
+
+    <h3>{{ cita.paciente.nombre }}</h3>
+
+    <p>
+        <strong>Fecha:</strong>
+        {{ cita.fecha }}
+    </p>
+
+    <p>
+        <strong>Hora:</strong>
+        {{ cita.hora }}
+    </p>
+
+    <p>
+        <strong>Tratamiento:</strong>
+        {{ cita.tratamiento }}
+    </p>
+
+</div>
+
+{% empty %}
+<div class="card reveal">
+    
+    No hay citas registradas.
+
+</div>
+
+{% endfor %}
+
+<a href="{% url 'inicio' %}">
+    <button>
+         Volver al inicio
+    </button>
+</a>
+
+{% endblock %}

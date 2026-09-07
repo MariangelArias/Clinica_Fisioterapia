@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+<!-- Página de calendario: muestra las citas en un calendario interactivo -->
+
+<h2>Agenda de citas</h2>
+
+<div class="card reveal">
+    <div id="calendar"></div>
+</div>
+
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css' rel='stylesheet'>
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.15/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.15/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.15/index.global.min.js'></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    var calendarEl = document.getElementById('calendar');
+    var calendarPlugins = [];
+
+    if (typeof FullCalendarDayGrid !== 'undefined') {
+        calendarPlugins.push(FullCalendarDayGrid);
+    } else if (typeof FullCalendar !== 'undefined' && FullCalendar.dayGridPlugin) {
+        calendarPlugins.push(FullCalendar.dayGridPlugin);
+    }
+    if (typeof FullCalendarTimeGrid !== 'undefined') {
+        calendarPlugins.push(FullCalendarTimeGrid);
+    } else if (typeof FullCalendar !== 'undefined' && FullCalendar.timeGridPlugin) {
+        calendarPlugins.push(FullCalendar.timeGridPlugin);
+    }
+    if (typeof FullCalendarInteraction !== 'undefined') {
+        calendarPlugins.push(FullCalendarInteraction);
+    } else if (typeof FullCalendar !== 'undefined' && FullCalendar.interactionPlugin) {
+        calendarPlugins.push(FullCalendar.interactionPlugin);
+    }
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+
+        plugins: calendarPlugins,
+        initialView: 'dayGridMonth',
+
+        locale: 'es',
+
+        height: 700,
+
+        selectable: true,
+
+        customButtons: {
+            myToday: {
+                text: 'Hoy',
+                click: function() {
+                    calendar.today();
+                    calendar.changeView('timeGridDay');
+                }
+            }
+        },
+
+        headerToolbar: {
+
+            left: 'prev,next myToday',
+
+            center: 'title',
+
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+
+        },
+
+        eventColor: '#5b8def',
+        eventTextColor: '#ffffff',
+        eventDisplay: 'block',
+        displayEventTime: false,
+        dayMaxEventRows: 3,
+
+        events: '/eventos/',
+
+        dateClick: function(info) {
+
+            window.location.href =
+            '/pacientes/';
+        }
+
+    });
+
+    calendar.render();
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+ <!--{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    Página de registro inicial: crear el primer usuario del sistema 
+    <meta charset="UTF-8">
+    <title>Crear usuario</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body class="login-container">
+    <div class="login-card">
+        <h1 style="color:#0d47a1; font-size:28px; margin-bottom:5px;">Crear primer usuario</h1>
+        <p style="color:#607d8b; margin-bottom:25px;">Crea el primer acceso para poder iniciar sesión.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <p>
+                {{ form.username.label_tag }}<br>
+                {{ form.username }}
+                {% for error in form.username.errors %}
+                    <span class="field-errors">{{ error }}</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password1.label_tag }}<br>
+                {{ form.password1 }}
+                {% for error in form.password1.errors %}
+                    <span class="field-errors">{{ error }}</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password2.label_tag }}<br>
+                {{ form.password2 }}
+                {% for error in form.password2.errors %}
+                    <span class="field-errors">{{ error }}</span>
+                {% endfor %}
+            </p>
+            <button type="submit" style="width:100%;">Crear usuario</button>
+        </form>
+
+        <p style="margin-top:20px;">
+             Enlace de regreso si el usuario decide volver al formulario de login 
+            <a href="{% url 'login' %}">Volver al login</a>
+        </p>
+    </div>
+</body>
+</html>-->

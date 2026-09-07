@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+
+{% block contenido %}
+
+<!-- Búsqueda de diagnóstico CIE: permite seleccionar código y nombre para el expediente -->
+<h2> Buscar diagnóstico CIE</h2>
+
+<form method="GET" class="card">
+
+    <input
+        type="text"
+        name="q"
+        placeholder="Ejemplo: rodilla"
+        required
+    >
+
+    <input
+        type="hidden"
+        name="next"
+        value="{{ next }}"
+    >
+
+    <button type="submit">
+
+        Buscar
+
+    </button>
+
+    <!-- Resultado de búsqueda: muestra códigos y nombres de diagnóstico -->
+
+</form>
+
+<br>
+
+{% if resultados %}
+
+    {% for r in resultados %}
+
+        <div class="card reveal">
+            <strong>
+
+                {{ r.codigo }}
+
+            </strong>
+
+            <br>
+
+            {{ r.nombre }}
+
+            <br><br>
+
+            <a href="{% url 'agregar_diagnostico' paciente.id %}?codigo={{ r.codigo|urlencode }}&diagnostico={{ r.nombre|urlencode }}{% if next %}&next={{ next|urlencode }}{% endif %}">
+
+                <button>
+
+                    Seleccionar diagnóstico
+
+                </button>
+
+            </a>
+
+        </div>
+
+    {% endfor %}
+
+{% endif %}
+
+{% endblock %}
