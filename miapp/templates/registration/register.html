@@ -1,9 +1,9 @@
- <!--{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    Página de registro inicial: crear el primer usuario del sistema 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear usuario</title>
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
 </head>
@@ -14,7 +14,15 @@
 
         <form method="post">
             {% csrf_token %}
-            {{ form.non_field_errors }}
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <p>
                 {{ form.username.label_tag }}<br>
                 {{ form.username }}
@@ -22,6 +30,7 @@
                     <span class="field-errors">{{ error }}</span>
                 {% endfor %}
             </p>
+
             <p>
                 {{ form.password1.label_tag }}<br>
                 {{ form.password1 }}
@@ -29,6 +38,7 @@
                     <span class="field-errors">{{ error }}</span>
                 {% endfor %}
             </p>
+
             <p>
                 {{ form.password2.label_tag }}<br>
                 {{ form.password2 }}
@@ -36,13 +46,13 @@
                     <span class="field-errors">{{ error }}</span>
                 {% endfor %}
             </p>
+
             <button type="submit" style="width:100%;">Crear usuario</button>
         </form>
 
         <p style="margin-top:20px;">
-             Enlace de regreso si el usuario decide volver al formulario de login 
             <a href="{% url 'login' %}">Volver al login</a>
         </p>
     </div>
 </body>
-</html>-->
+</html>
