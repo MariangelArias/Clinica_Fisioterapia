@@ -4,14 +4,6 @@ Sistema web para la gestión integral de una clínica de fisioterapia, desarroll
 
 La aplicación permite administrar pacientes, expedientes clínicos, citas y diagnósticos CIE, además de incorporar autenticación de usuarios y diferentes niveles de acceso según el rol.
 
----
-
-## Vista general
-
-![Dashboard de la aplicación](docs/screenshots/dashboard.png)
-
----
-
 ## Características principales
 
 ### Gestión de pacientes
@@ -86,8 +78,6 @@ Incluye:
 - Calendario interactivo.
 - Interfaz diferenciada para las principales secciones del sistema.
 
----
-
 ## Capturas de pantalla
 
 ### Panel principal
@@ -132,8 +122,6 @@ Pantalla de autenticación para acceder al sistema.
 
 La aplicación cuenta con un modo oscuro que puede activarse desde la interfaz y cuya preferencia se conserva en el navegador.
 
----
-
 ## Tecnologías utilizadas
 
 ### Backend
@@ -160,8 +148,6 @@ La aplicación cuenta con un modo oscuro que puede activarse desde la interfaz y
 
 - SQLite para el entorno de desarrollo.
 - MySQL como alternativa de configuración.
-
----
 
 ## Estructura del proyecto
 
@@ -202,3 +188,4 @@ fisioterapia_web/
 │
 └── docs/
     └── screenshots/
+```
