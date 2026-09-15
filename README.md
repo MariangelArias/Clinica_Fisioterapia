@@ -1,137 +1,204 @@
 # Clínica de Fisioterapia
 
-Sistema Django para la gestión clínica de fisioterapia: pacientes, expedientes, citas, diagnósticos CIE y autenticación.
+Sistema web para la gestión integral de una clínica de fisioterapia, desarrollado con **Django**.
 
-## Descripción
+La aplicación permite administrar pacientes, expedientes clínicos, citas y diagnósticos CIE, además de incorporar autenticación de usuarios y diferentes niveles de acceso según el rol.
 
-Aplicación web en Django 6.0.4 con:
-- Autenticación de usuarios (login / logout / registro inicial)
-- Gestión de pacientes
-- Creación y edición de expedientes clínicos
-- Búsqueda y selección de diagnósticos CIE
-- Calendario interactivo para agendar citas
-- Modo oscuro persistente en el navegador
-- Envío de correo de confirmación de cita
+---
 
-## Requisitos
+## Vista general
 
-- Python 3.14
-- Django 6.0.4
+![Dashboard de la aplicación](docs/screenshots/dashboard.png)
+
+---
+
+## Características principales
+
+### Gestión de pacientes
+
+- Registro de nuevos pacientes.
+- Consulta de pacientes registrados.
+- Almacenamiento de información básica como nombre, cédula, teléfono y correo.
+- Acceso al expediente clínico asociado a cada paciente.
+
+### Expedientes clínicos
+
+Cada expediente permite registrar y consultar información relacionada con la atención del paciente:
+
+- Fecha y hora de la cita.
+- Tratamiento.
+- Notas clínicas.
+- Código de diagnóstico CIE.
+- Diagnóstico asociado.
+- Notas adicionales.
+- Edición de la información según los permisos del usuario.
+
+### Gestión de citas
+
+- Creación de citas asociadas a un paciente.
+- Consulta de citas registradas.
+- Visualización de citas mediante un calendario interactivo.
+- Consulta de las citas correspondientes al día actual.
+- Selección de fecha y hora para la atención.
+
+### Diagnósticos CIE
+
+La aplicación permite realizar búsquedas de diagnósticos mediante códigos y descripciones de la clasificación CIE.
+
+El usuario puede consultar los resultados disponibles y seleccionar el diagnóstico que desea asociar al expediente clínico.
+
+### Autenticación y roles
+
+El sistema utiliza autenticación de usuarios y control de permisos para separar las funciones disponibles según el rol.
+
+**Recepcionista:**
+
+- Consultar pacientes.
+- Registrar pacientes.
+- Consultar expedientes.
+- Registrar nuevas citas.
+- Buscar diagnósticos CIE.
+- No puede modificar expedientes existentes.
+
+**Fisioterapeuta:**
+
+- Consultar pacientes.
+- Registrar pacientes.
+- Consultar expedientes.
+- Registrar nuevas citas.
+- Buscar diagnósticos CIE.
+- Modificar expedientes existentes.
+
+### Interfaz y experiencia de usuario
+
+La aplicación cuenta con una interfaz orientada a facilitar la navegación y consulta de información.
+
+Incluye:
+
+- Diseño responsive.
+- Modo oscuro.
+- Persistencia del modo oscuro mediante `localStorage`.
+- Tarjetas para organizar la información.
+- Animaciones y transiciones.
+- Efectos visuales al mostrar elementos.
+- Notificaciones mediante mensajes tipo toast.
+- Contadores animados en el panel principal.
+- Calendario interactivo.
+- Interfaz diferenciada para las principales secciones del sistema.
+
+---
+
+## Capturas de pantalla
+
+### Panel principal
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+El panel principal presenta un resumen de la información del sistema, incluyendo pacientes registrados, citas y citas correspondientes al día actual.
+
+### Pacientes
+
+![Lista de pacientes](docs/screenshots/pacientes.png)
+
+Sección destinada a la consulta y gestión de los pacientes registrados en el sistema.
+
+### Expediente clínico
+
+![Expediente clínico](docs/screenshots/expediente.png)
+
+Vista del expediente asociado a un paciente, donde se pueden consultar sus citas, tratamientos, notas y diagnósticos registrados.
+
+### Agenda
+
+![Agenda de citas](docs/screenshots/agenda.png)
+
+Calendario interactivo utilizado para visualizar las citas programadas.
+
+### Diagnósticos CIE
+
+![Búsqueda de diagnósticos CIE](docs/screenshots/cie.png)
+
+Interfaz para realizar búsquedas de diagnósticos utilizando códigos o descripciones CIE.
+
+### Inicio de sesión
+
+![Inicio de sesión](docs/screenshots/login.png)
+
+Pantalla de autenticación para acceder al sistema.
+
+### Modo oscuro
+
+![Modo oscuro](docs/screenshots/dark-mode.png)
+
+La aplicación cuenta con un modo oscuro que puede activarse desde la interfaz y cuya preferencia se conserva en el navegador.
+
+---
+
+## Tecnologías utilizadas
+
+### Backend
+
+- **Python 3.14**
+- **Django 6.0.4**
+
+### Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+- Django Templates
+
+### Librerías y herramientas
+
+- FullCalendar
+- Chart.js
 - python-dotenv
 - PyMySQL
+- SMTP de Gmail
 
-## Instalación
+### Base de datos
 
-1. Crear y activar un entorno virtual:
+- SQLite para el entorno de desarrollo.
+- MySQL como alternativa de configuración.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-```
+---
 
-2. Instalar dependencias:
+## Estructura del proyecto
 
-```powershell
-pip install -r requirements.txt
-```
-
-3. Copiar `.env.example` a `.env` y completar los valores reales en tu equipo local.
-
-No subas ese archivo a GitHub. Debe contener valores reales solo en tu equipo local.
-
-## Variables de entorno
-
-El proyecto carga variables desde `.env` usando `python-dotenv`.
-
-Ejemplo mínimo de `.env`:
-
-```env
-SECRET_KEY=pon_aqui_una_clave_larga_y_aleatoria
-DEBUG=False
-ALLOWED_HOSTS=localhost,127.0.0.1
-```
-
-### Configuración opcional de MySQL
-
-Si deseas usar MySQL en lugar de SQLite, agrega estas variables:
-
-```env
-DB_ENGINE=django.db.backends.mysql
-DB_NAME=nombre_base_datos
-DB_USER=usuario
-DB_PASSWORD=tu_contraseña_real
-DB_HOST=localhost
-DB_PORT=3306
-EMAIL_HOST_USER=tu_correo@gmail.com
-EMAIL_HOST_PASSWORD=tu_app_password
-```
-
-En `fisioterapia_web/__init__.py` el proyecto intenta importar `MySQLdb` y usa `PyMySQL` como respaldo en caso de que no esté disponible.
-
-## Base de datos por defecto
-
-- Si `DB_ENGINE` está definida, el proyecto usa la base de datos configurada en `.env`.
-- Si no, usa SQLite con `db.sqlite3` en la raíz del proyecto.
-
-Para publicar en GitHub, elimina `db.sqlite3` del repositorio y crea una base vacía o solo migraciones.
-
-## Migraciones
-
-Ejecutar migraciones:
-
-```powershell
-python manage.py migrate
-```
-
-## Crear superusuario
-
-```powershell
-python manage.py createsuperuser
-```
-
-## Ejecutar el servidor
-
-```powershell
-python manage.py runserver
-```
-
-Luego abrir `http://127.0.0.1:8000/` en el navegador.
-
-## Rutas útiles
-
-- `/login/` — login
-- `/inicio/` — página principal
-- `/pacientes/` — lista de pacientes
-- `/pacientes/crear/` — crear nuevo paciente
-- `/citas/` — lista de citas
-- `/citas/hoy/` — citas de hoy
-
-## Notas importantes
-
-- `LOGIN_URL` está configurado a `/login/`.
-- `LOGIN_REDIRECT_URL` llega a `/inicio/`.
-- El modo oscuro se guarda en `localStorage` del navegador mediante JavaScript.
-
-## Estructura básica
-
-- `fisioterapia_web/` — configuración Django
-- `miapp/` — aplicación principal con vistas, modelos, servicios y plantillas
-- `miapp/templates/` — plantillas HTML
-- `miapp/static/css/estilos.css` — estilos y dark mode
-
-## Email
-
-La configuración SMTP está en `fisioterapia_web/settings.py` y usa Gmail:
-
-- `EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'`
-- `EMAIL_HOST = 'smtp.gmail.com'`
-- `EMAIL_PORT = 587`
-- `EMAIL_USE_TLS = True`
-
-También define `EMAIL_HOST_USER` y `EMAIL_HOST_PASSWORD` desde el `.env`.
-
-## Validación rápida
-
-```powershell
-python manage.py check
-```
+```text
+fisioterapia_web/
+│
+├── manage.py
+├── db.sqlite3
+├── requirements.txt
+├── .env
+│
+├── fisioterapia_web/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── miapp/
+│   ├── migrations/
+│   ├── templates/
+│   │   ├── pacientes/
+│   │   ├── expedientes/
+│   │   ├── evaluaciones/
+│   │   ├── cie/
+│   │   ├── layout.html
+│   │   └── index.html
+│   │
+│   ├── static/
+│   │   ├── css/
+│   │   ├── js/
+│   │   └── images/
+│   │
+│   ├── models.py
+│   ├── views.py
+│   ├── forms.py
+│   └── urls.py
+│
+└── docs/
+    └── screenshots/
