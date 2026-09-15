@@ -83,6 +83,8 @@ Incluye:
 ### Panel principal
 
 ![Dashboard](docs/screenshots/dashboard.png)
+![Dashboard](docs/screenshots/dashboard(2).png)
+![Dashboard](docs/screenshots/dashboard(3).png)
 
 El panel principal presenta un resumen de la información del sistema, incluyendo pacientes registrados, citas y citas correspondientes al día actual.
 
