@@ -274,7 +274,6 @@ python manage.py runserver
 
 Una vez iniciado el servidor, acceder desde el navegador a:
 http://127.0.0.1:8000/ 
-
 La aplicación estará disponible para su uso local.
 
  Proyecto en desarrollo activo — algunas funcionalidades pueden cambiar o estar incompletas.
